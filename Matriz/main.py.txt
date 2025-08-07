@@ -1,0 +1,76 @@
+import numpy as np
+
+# Função para ler uma matriz de um arquivo
+def ler(arquivo):
+    try:
+        matriz = np.loadtxt(arquivo, delimiter=',', dtype=int)
+    except ValueError:
+        matriz = np.genfromtxt(arquivo, delimiter=',', dtype=int)
+    return matriz
+
+# Função para verificar se a matriz é quadrada
+def quadrada(matriz):
+    linhas, colunas = matriz.shape
+    return linhas == colunas
+
+# Função para soma de dois números
+def add(a, b):
+    return a + b
+
+# Função para multiplicação de dois números
+def mult(a, b):
+    return a * b
+
+# Função para multiplicar duas matrizes
+def multm(m1, m2):
+    linhas_m1, colunas_m1 = m1.shape
+    linhas_m2, colunas_m2 = m2.shape
+    
+    if colunas_m1 != linhas_m2:
+        raise ValueError("O número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.")
+    
+    resultado = np.zeros((linhas_m1, colunas_m2), dtype=int)
+    
+    print("Passo a passo da multiplicação:")
+    for i in range(linhas_m1):
+        for j in range(colunas_m2):
+            soma_parcial = 0
+            for k in range(colunas_m1):
+                soma_parcial = add(soma_parcial, mul(m1[i, k], m2[k, j]))
+                print(f"{m1[i, k]} * {m2[k, j]} = {mul(m1[i, k], m2[k, j])}, soma parcial: {soma_parcial}")
+            resultado[i, j] = soma_parcial
+            print(f"Resultado para posição ({i}, {j}): {resultado[i, j]}")
+    
+    return resultado
+
+# Função principal
+def main():
+    arquivo1 = 'matriz1.txt'  # Substitua pelo nome do arquivo que você tiver
+    arquivo2 = 'matriz2.txt'  # Substitua pelo nome do arquivo que você tiver
+    
+    # Ler as matrizes do arquivo
+    m1 = ler(arquivo1)
+    m2 = ler(arquivo2)
+    
+    # Verificar se as matrizes são quadradas
+    if not quadrada(m1) or not quadrada(m2):
+        print("Pelo menos uma das matrizes não é quadrada.")
+        return
+    
+    # Exibir as matrizes
+    print("Matriz 1 (Entrada):")
+    print(m1)
+    print("\nMatriz 2 (Entrada):")
+    print(m2)
+    
+    # Multiplicação das matrizes
+    try:
+        resultado = mult(m1, m2)
+        print("\nResultado da multiplicação das matrizes:")
+        print(resultado)
+    except ValueError as e:
+        print(f"Erro: {e}")
+
+# Executar a função principal
+if __name__ == "__main__":
+    main()
